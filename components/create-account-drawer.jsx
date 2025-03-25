@@ -46,11 +46,15 @@ export function CreateAccountDrawer({ children }) {
   });
 
   const { loading: createAccountLoading, fn: createAccountFn, error, data: newAccount } = useFetch(
-    "/api/create-account" // API route ka URL
+    "/api/create-account"
   );
-
+  
   const onSubmit = async (data) => {
-    await createAccountFn(data);
+    if (typeof createAccountFn === "function") {
+      await createAccountFn(data);
+    } else {
+      console.error("createAccountFn is not a function:", createAccountFn);
+    }
   };
 
   useEffect(() => {

@@ -2,21 +2,26 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 
 export async function getUserAccounts() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized: User not logged in");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) {
-    throw new Error("User not found in database");
-  }
-
   try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized: User not logged in");
+
+    let user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) {
+      console.log("User not found, syncing with database");
+      await db.user.create({
+        data: { clerkUserId: userId },
+      });
+      user = await db.user.findUnique({
+        where: { clerkUserId: userId },
+      });
+    }
+
     const accounts = await db.account.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
@@ -46,12 +51,18 @@ export async function createAccount(data) {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized: User not logged in");
 
-    const user = await db.user.findUnique({
+    let user = await db.user.findUnique({
       where: { clerkUserId: userId },
     });
 
     if (!user) {
-      throw new Error("User not found in database");
+      console.log("User not found, syncing with database");
+      await db.user.create({
+        data: { clerkUserId: userId },
+      });
+      user = await db.user.findUnique({
+        where: { clerkUserId: userId },
+      });
     }
 
     const balanceFloat = parseFloat(data.balance);
@@ -85,26 +96,32 @@ export async function createAccount(data) {
       },
     });
 
-    revalidatePath("/dashboard");
     return { success: true, data: { ...account, balance: balanceFloat } };
   } catch (error) {
+    console.error("Error in createAccount:", error.message);
     throw new Error(error.message || "Failed to create account");
   }
 }
 
 export async function getDashboardData() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized: User not logged in");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) {
-    throw new Error("User not found in database");
-  }
-
   try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized: User not logged in");
+
+    let user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) {
+      console.log("User not found, syncing with database");
+      await db.user.create({
+        data: { clerkUserId: userId },
+      });
+      user = await db.user.findUnique({
+        where: { clerkUserId: userId },
+      });
+    }
+
     const transactions = await db.transaction.findMany({
       where: { userId: user.id },
       orderBy: { date: "desc" },

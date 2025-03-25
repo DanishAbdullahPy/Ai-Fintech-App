@@ -1,6 +1,4 @@
 
----
-
 # AI Finance Platform
 
 ![AI Finance Platform](https://img.shields.io/badge/Status-In%20Development-yellow)  
@@ -58,28 +56,11 @@ Follow these steps to set up the project locally:
    cd ai-finance-platform
    ```
 
-2. **Install Dependencies**:
-   Using npm:
-   ```bash
-   npm install
-   ```
-   Or using yarn:
-   ```bash
-   yarn install
-   ```
 
 3. **Set Up Environment Variables**:
    Create a `.env.local` file in the root directory and add any necessary environment variables (e.g., API keys, database URLs). For now, the project doesn’t require any specific environment variables, but you can add them as needed.
 
-4. **Run the Development Server**:
-   ```bash
-   npm run dev
-   ```
-   Or with yarn:
-   ```bash
-   yarn dev
-   ```
-   The app will be available at `http://localhost:3000`.
+
 
 ## Usage
 1. **Access the App**:
@@ -147,41 +128,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-### Steps to Push to GitHub
-Now that the `README.md` is ready, let’s push the project to GitHub:
-
-1. **Initialize Git (if not already done)**:
-   If your project isn’t already a Git repository, initialize it:
-   ```bash
-   git init
-   ```
-
-2. **Add Files**:
-   Stage all your project files, including the new `README.md`:
-   ```bash
-   git add .
-   ```
-
-3. **Commit Changes**:
-   Commit your changes with a message:
-   ```bash
-   git commit -m "Initial commit: Set up AI Finance Platform with transaction form and README"
-   ```
-
-4. **Create a GitHub Repository**:
-   - Go to GitHub and create a new repository named `ai-finance-platform`.
-   - Do not initialize it with a README, as we’ve already created one.
-
-5. **Add Remote and Push**:
-   Link your local repository to GitHub and push:
-   ```bash
-   git remote add origin https://github.com/your-username/ai-finance-platform.git
-   git branch -M main
-   git push -u origin main
-   ```
-
-6. **Verify**:
-   Visit your GitHub repository (`https://github.com/your-username/ai-finance-platform`) to ensure all files, including the `README.md`, are uploaded correctly.
 
 ### Additional Notes
 - **License File**: The README mentions a `LICENSE` file. If you want to use the MIT License, create a `LICENSE` file in the root directory with the following content:

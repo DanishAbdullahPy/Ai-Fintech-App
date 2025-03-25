@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { getUserAccounts } from "@/actions/dashboard";
 import { getDashboardData } from "@/actions/dashboard";
 import { getCurrentBudget } from "@/actions/budget";
@@ -10,6 +12,11 @@ import { Plus } from "lucide-react";
 import { DashboardOverview } from "./_components/transaction-overview";
 
 export default async function DashboardPage() {
+  const { userId } = await auth();
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
   const [accounts, transactions] = await Promise.all([
     getUserAccounts(),
     getDashboardData(),
@@ -22,7 +29,6 @@ export default async function DashboardPage() {
   if (defaultAccount) {
     budgetData = await getCurrentBudget(defaultAccount.id);
   }
-
   return (
     <div className="space-y-8">
       {/* Budget Progress */}
